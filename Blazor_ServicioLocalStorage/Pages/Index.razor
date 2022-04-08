@@ -1,0 +1,42 @@
+﻿@page "/"
+@using Blazor_ServicioLocalStorage.Services
+@inject IJSRuntime js
+
+<h2>Servicio para ver contido de Local Storage</h2>
+
+<div>
+    Datos:
+
+    <input type="text" @bind-value="datos" size="50" />
+</div>
+
+<div class="pt-2">
+    <button class="btn btn-primary" @onclick="GardarEnLocalStorageAsync">
+        Gardar en Local Storage
+    </button>
+    <button class="btn btn-primary" @onclick="LerDeLocalStorageAsync">
+        Ler de Local Storage
+    </button>
+</div>
+
+@code {
+    private string datos;
+
+    private LocalStorageService localStorage;
+
+    protected override void OnInitialized()
+    {
+        localStorage = new LocalStorageService(js);
+    }
+
+    async Task GardarEnLocalStorageAsync()
+
+    {
+        await localStorage.SetItemAsync<string>("localStorageData", datos);
+    }
+
+    async Task LerDeLocalStorageAsync()
+    {
+        datos = await localStorage.GetItemAsync<string>("localStorageData");
+    }
+}
